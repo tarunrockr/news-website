@@ -1,0 +1,216 @@
+{% extends 'adminmaster.html' %}
+
+{% load static %}
+
+{% block css_block %}
+   {# for datatable #}
+   <link rel="stylesheet" type="text/css" href="{% static 'back/css/jquery.dataTables.css' %}">
+   <style type="text/css">
+      .error_class{
+         color: red;
+         padding-left: 10px;
+         font-weight: bold;
+      }
+   </style>
+   <script src="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>
+{% endblock %}
+
+{% block content %}
+   
+   <!-- <div id="page-content"> -->
+
+      <div class="content-header">
+         <div class="header-section">
+            <h1>
+               <i class="fa fa-table"></i>Setting<br /><small>You can add your settings!</small>
+            </h1>
+         </div>
+      </div>
+      <ul class="breadcrumb breadcrumb-top">
+         <li>Site</li>
+         <li><a href="{% url 'site_setting' %}">Setting</a></li>
+      </ul>
+
+
+      <div class="row">
+         <div class="col-md-12">
+            <div class="block">
+               <div class="block-title">
+
+                  <h2><strong>Setting</strong> </h2>
+               </div>
+
+               
+
+               {% if messages %}
+                  {% for message in messages %}
+                     <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>{{ message }}</strong>
+                     </div>
+                  {% endfor %}
+                  <!--<ul class="messages">
+                      {% for message in messages %}
+                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                      {% endfor %}
+                  </ul> -->
+               {% endif %}
+
+
+               <form action="{% url 'site_setting.store' %}" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered"  />
+
+                  {% csrf_token %}
+
+                  <div class="form-group">
+
+                     <div class="col-md-6">
+                        <input type="text" name="name" id="name" value="{{ site_data.name }}" class="form-control" placeholder="Site Title" />
+                        {% if error.name %}
+                           <span class="error_class">{{ error.name }}</span>
+                        {% endif %}
+                     </div>
+
+                     <div class="col-md-6">
+                        <input type="text" name="site_phone" id="site_phone" value="{{ site_data.tell }}" class="form-control" placeholder="Site Phone" />
+                        {% if error.site_phone %}
+                           <span class="error_class">{{ error.site_phone }}</span>
+                        {% endif %}
+                     </div>
+
+                  </div>
+
+                  <div class="form-group">
+
+                     <div class="col-md-6">
+                        <input type="text" name="facebook_link" id="facebook_link" value="{{ site_data.fb }}" class="form-control" placeholder="Facebook link" />
+                        {% if error.facebook_link %}
+                           <span class="error_class">{{ error.facebook_link }}</span>
+                        {% endif %}
+                     </div>
+
+                     <div class="col-md-6">
+                        <input type="text" name="twitter_link" id="twitter_link" value="{{ site_data.tw }}" class="form-control" placeholder="Twitter link" />
+                        {% if error.twitter_link %}
+                           <span class="error_class">{{ error.twitter_link }}</span>
+                        {% endif %}
+                     </div>
+
+                  </div>
+
+                  <div class="form-group">
+
+                     <div class="col-md-6">
+                        <input type="text" name="youtube_link" id="youtube_link" value="{{ site_data.yt }}" class="form-control" placeholder="Youtube link" />
+                        {% if error.youtube_link %}
+                           <span class="error_class">{{ error.youtube_link }}</span>
+                        {% endif %}
+                     </div>
+
+                     <div class="col-md-6">
+                        <input type="text" name="link" id="link" value="{{ site_data.link }}" class="form-control" placeholder="Link" />
+                        {% if error.link %}
+                           <span class="error_class">{{ error.link }}</span>
+                        {% endif %}
+                     </div>
+
+                  </div>
+
+                  
+
+                  <div class="form-group">
+
+                     <div class="col-md-12">
+                        <label>About</label>
+                        <textarea name="about" id="about" rows="5" class="form-control editor" placeholder="About">{{ site_data.about }}</textarea>
+                        {% if error.about %}
+                           <span class="error_class">{{ error.about }}</span>
+                        {% endif %}
+                     </div>
+
+                  </div>
+
+                  
+
+                  <div class="form-group">
+
+                     <div class="col-md-6">
+                        <input type="file" name="sitelogo" id="sitelogo"  class="form-control" placeholder="Site Logo">
+                        {% if error.sitelogo %}
+                           <span class="error_class">{{ error.sitelogo }}</span>
+                        {% endif %}
+                     </div>
+
+                  </div>
+
+                  <div class="form-group">
+
+                     <div class="col-md-6">
+                        <label>Current Image</label><br>
+                        <img src="{{ site_data.picurl }}" style="width:200px; height:100px;">
+                     </div>
+
+                  </div>
+
+
+                  <div class="form-group form-actions">
+                     <div class="col-md-12">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
+                        <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
+                     </div>
+                  </div>
+
+
+                  
+               </form>
+
+
+            </div>
+         </div>
+
+      </div>
+
+
+
+   <!-- </div> -->
+
+{% endblock %}
+
+
+{% block js_block %}
+   
+   <!-- for datatable  -->
+   <script type="text/javascript" src="{% static 'back/js/jquery.dataTables.js' %}"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready( function () {
+          //$('#news_list').DataTable();
+          $('#table_id').DataTable();
+      } );
+
+      $(function(){
+
+         $(document).on('change','#news_category', function(){
+            var category_id = $("#news_category").val();
+            if(category_id){
+               $.post({
+                  url:"{% url 'news.fetch.subcategory' %}",
+                  method:"POST",
+                  dataType:"JSON",
+                  data: {category_id: category_id, csrfmiddlewaretoken: '{{ csrf_token }}' },
+                  success: function(data){
+                     $(".subcategory").html(data["subcategory"]);
+                  }
+               });
+            }
+         });
+
+      });
+
+   </script>
+   <script>
+        CKEDITOR.replace( 'news_text_short' );
+        CKEDITOR.replace( 'news_text' );
+    </script>
+   
+
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'adminmaster.html' %}
+
+{% load static %}
+
+{% block css_block %}
+   {# for datatable #}
+   <link rel="stylesheet" type="text/css" href="{% static 'back/css/jquery.dataTables.css' %}">
+{% endblock %}
+
+{% block content %}
+   
+   <!-- <div id="page-content"> -->
+
+      <div class="content-header">
+         <div class="header-section">
+            <h1>
+               <i class="fa fa-table"></i>News List<br /><small>You can add, edit, and delete your data!</small>
+            </h1>
+         </div>
+      </div>
+      <ul class="breadcrumb breadcrumb-top">
+         <li>News</li>
+         <li><a href="{% url 'news.list' %}">List</a></li>
+      </ul>
+
+      <div class="block full">
+         <div class="block-title">
+            <h2><strong>News</strong> List</h2>
+         </div>
+
+         <div class="table-responsive">
+
+            {% if messages %}
+               {% for message in messages %}
+                  <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible">
+                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                     <strong>{{ message }}</strong>
+                  </div>
+               {% endfor %}
+            {% endif %}
+
+            <table id="table_id" class="display table-vcenter table-condensed table-bordered">
+
+               <thead>
+                  <tr>
+                     <th class="text-center">ID</th>
+                     <th class="text-center">Image</th>
+                     <th>Title</th>
+                     <th>Date</th>
+                     <th>Category</th>
+                     <th>Writer</th>
+                     <th>Status</th>
+                     <th>Views</th>
+                     <th class="text-center">Actions</th>
+                  </tr>
+               </thead>
+
+               <tbody>
+
+                  {% for news in allnews %}
+                    <tr>
+                       <td class="text-center">{{ news.0 }}</td>
+                       <td class="text-center"><img style="display: inline-block; width: 50px; height: 50px;" src="{{ news.picurl }}" alt="avatar" class="img-circle" /></td>
+                       <td>{{ news.1 }}</td>
+                       <td>{{ news.4|date:'d-M-Y | h:i:s A' }}</td>
+                       <td>{{ news.12 }} | {{ news.13 }}</td>
+                       <td>{{ news.7 }}</td>
+                       {% if news.13 == 1 %}
+                          <td>Active</td>
+                       {% else %}
+                          <td>InActive</td>
+                       {% endif %}
+                       <td>{{ news.9 }}</td>
+                       <td class="text-center">
+                          <div class="btn-group">
+                             <a href="{% url 'news.edit' id=news.0 %}" data-toggle="tooltip" title="Edit" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i> Edit </a> <br>
+                             <a href="{% url 'news.delete' id=news.0 %}" data-toggle="tooltip" title="Delete" class="btn btn-xs btn-danger"><i class="fa fa-times"></i> Delete</a> <br>
+
+                             <a href="#" data-toggle="tooltip" data-id="{{ news.13 }}" id="{{ news.0 }}" title="Activate" class="btn btn-xs btn-success activate"> Toggle Activate </a>
+                          </div>
+                       </td>
+                    </tr>
+                  {% endfor %}
+
+               </tbody>
+
+            </table>
+
+         </div>
+      </div>
+
+   <!-- </div> -->
+
+{% endblock %}
+
+
+{% block js_block %}
+   
+   <!-- for datatable  -->
+   <script type="text/javascript" src="{% static 'back/js/jquery.dataTables.js' %}"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready( function () {
+          //$('#news_list').DataTable();
+          $('#table_id').DataTable();
+      } );
+
+      $(function(){
+
+        $(document).on('click','.activate',function(event){
+          event.preventDefault();
+          var news_id = $(this).attr('id');
+          var active_status = $(this).attr('data-id');
+          //alert(active_status); return false;
+          $.ajax({
+            url: "/panel/news/activeToggleAjax",
+            method: "POST",
+            dataType: "JSON",
+            data: {news_id: news_id, active_status: active_status, csrfmiddlewaretoken : '{{ csrf_token }}' },
+            success: function(result){
+              console.log(result);
+              setTimeout(function(){ location.reload(); }, 2000);
+            }
+          });
+        });
+
+      });
+
+   </script>
+   
+
+{% endblock %}

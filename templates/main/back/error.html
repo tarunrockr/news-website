@@ -1,0 +1,46 @@
+{% extends 'adminmaster.html' %}
+
+{% load static %}
+
+{% block css_block %}
+   {# for datatable #}
+   <link rel="stylesheet" type="text/css" href="{% static 'back/css/jquery.dataTables.css' %}">
+{% endblock %}
+
+{% block content %}
+   
+   <!-- <div id="page-content"> -->
+
+      <div class="content-header">
+         <div class="header-section">
+            <h1>
+               <i class="fa fa-table"></i>Error <br /><small>{{ error }}</small>
+            </h1>
+         </div>
+      </div>
+      <ul class="breadcrumb breadcrumb-top">
+         <li>News</li>
+         <li><a href="{% url 'news.list' %}">List</a></li>
+      </ul>
+
+
+   <!-- </div> -->
+
+{% endblock %}
+
+
+{% block js_block %}
+   
+   <!-- for datatable  -->
+   <script type="text/javascript" src="{% static 'back/js/jquery.dataTables.js' %}"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready( function () {
+          //$('#news_list').DataTable();
+          $('#table_id').DataTable();
+      } );
+
+   </script>
+   
+
+{% endblock %}

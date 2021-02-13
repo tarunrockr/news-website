@@ -1,0 +1,226 @@
+{% extends 'master.html' %}
+
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+	
+	<!-- Feature post -->
+	<section class="bg0">
+			<div class="row m-rl-0 justify-content-center">
+
+				{% for last_news in last_three_news %}
+					<div class="col-md-4 p-rl-1 p-b-2">
+						<div class="bg-img1 size-a-11 how1 pos-relative" style="background-image: url({{ last_news.picurl }});">
+							<a href="{% url 'news.detail' last_news.id %}" class="dis-block how1-child1 trans-03"></a>
+
+							<div class="flex-col-e-s s-full p-rl-25 p-tb-18">
+								<a href="#" class="dis-block how1-child2 f1-s-2 cl0 bo-all-1 bocl0 hov-btn1 trans-03 p-rl-5 p-t-2">
+									{{ last_news.catname }}
+								</a>
+
+								<h3 class="how1-child2 m-t-14 m-b-10">
+									<a href="{% url 'news.detail' last_news.id %}" class="f1-l-1 cl0 hov-cl10 trans-03 respon1">
+										{{ last_news.name }}
+									</a>
+								</h3>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+			</div>
+	</section>
+
+	<!-- Post -->
+	<section class="post bg0 p-t-85">
+		<div class="container">
+			<div class="row justify-content-center">
+
+				<div class="col-md-12 col-lg-12">
+					<div class="p-r-10 p-rl-0-sr991 p-b-20">
+					{% for cat in category %}
+
+						{% if cat.3 != 0 %}
+
+						<!-- Entertainment  -->
+						<div class="p-b-25">
+							<div class="how2 how2-cl1 flex-s-c">
+								<h3 class="f1-m-2 cl12 tab01-title">
+									{{ cat.1 }}
+								</h3>
+							</div>
+
+							<div class="flex-wr-sb-s p-t-35">
+
+								<!-- <div class="size-w-6 w-full-sr575"> -->
+								<div class="col-md-6">
+								
+									{% for news in news %}	
+
+										{% if news.cat_id == cat.0 %}
+
+											
+
+												<!-- Item post -->	
+												<div class="flex-wr-sb-s m-b-30">
+													<a href="{% url 'news.detail' news_id=news.id %}" class="size-w-1 wrap-pic-w hov1 trans-03">
+														<img src="{{ news.picurl }}" alt="IMGDonec metus orci, malesuada et lectus vitae">
+													</a>
+
+													<div class="size-w-2">
+														<h5 class="p-b-5">
+															<a href="{% url 'news.detail' news_id=news.id %}" class="f1-s-5 cl3 hov-cl10 trans-03">
+																{{ news.name }}
+															</a>
+														</h5>
+
+														<span class="cl8">
+															<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
+																{{ news.catname }}
+															</a>
+
+															<span class="f1-s-3 m-rl-3">
+																-
+															</span>
+
+															<span class="f1-s-3">
+																{{ news.date }}
+															</span>
+														</span>
+													</div>
+												</div>
+
+											
+
+										{% endif %}
+
+									{% endfor %}
+
+									
+								</div>
+
+								<!-- <div class="size-w-6 w-full-sr575"> -->
+								<div class="col-md-6">
+
+									<!--  HERE POPNEWS MEANS POPULAR NEWS  -->
+									{% for news1 in popnews %}	
+
+										{% if news1.cat_id == cat.0 %}
+
+											{% if news1.show != 0 %}
+
+												<!-- Item post -->	
+												<div class="flex-wr-sb-s m-b-30">
+													<a href="{% url 'news.detail' news_id=news1.id %}" class="size-w-1 wrap-pic-w hov1 trans-03">
+														<img src="{{ news1.picurl }}" alt="IMGDonec metus orci, malesuada et lectus vitae">
+													</a>
+
+													<div class="size-w-2">
+														<h5 class="p-b-5">
+															<a href="{% url 'news.detail' news_id=news1.id %}" class="f1-s-5 cl3 hov-cl10 trans-03">
+																{{ news1.name }}
+															</a>
+														</h5>
+
+														<span class="cl8">
+															<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
+																{{ news1.catname }}
+															</a>
+
+															<span class="f1-s-3 m-rl-3">
+																-
+															</span>
+
+															<span class="f1-s-3">
+																{{ news1.date }}
+															</span>
+														</span>
+													</div>
+												</div>
+
+											{% endif %}
+
+										{% endif %}
+
+									{% endfor %}
+
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					{% endfor %}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<!-- Banner -->
+	<!-- <div class="container m-t-10 m-b-15">
+		<div class="flex-c-c">
+			<a href="#">
+				<img class="max-w-full" src="{% static 'front/images/banner-01.jpg' %}" alt="IMG">
+			</a>
+		</div>
+	</div> -->
+
+	<!-- Latest -->
+	<section class="bg0 p-t-60 p-b-40">
+		<div class="container">
+			<div class="how2 how2-cl4 flex-s-c">
+				<h3 class="f1-m-2 cl3 tab01-title">
+					Latest News
+				</h3>
+			</div>
+
+			<div class="row p-t-35">
+
+
+				{% for latest_news in news %}
+
+					<div class="col-sm-6 col-md-4">
+						<!-- Item latest -->	
+						<div class="m-b-45">
+							<a href="{% url 'news.detail' latest_news.id %}" class="wrap-pic-w hov1 trans-03">
+								<!-- <img src="{% static 'front/images/latest-01.jpg' %}" alt="IMG"> -->
+								<img src="{{ latest_news.picurl }}" alt="IMG">
+							</a>
+
+							<div class="p-t-16">
+								<h5 class="p-b-5">
+									<a href="{% url 'news.detail' latest_news.id %}" class="f1-m-3 cl2 hov-cl10 trans-03">
+										{{ latest_news.name }} 
+									</a>
+								</h5>
+
+								<p>{{ latest_news.short_text|safe }}</p>
+
+								<span class="cl8">
+									<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+										by {{ latest_news.writer }}
+									</a>
+
+									<span class="f1-s-3 m-rl-3">
+										-
+									</span>
+
+									<span class="f1-s-3">
+										{{ latest_news.date }}
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>
+
+				{% endfor %}
+				
+
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

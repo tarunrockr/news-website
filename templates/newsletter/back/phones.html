@@ -1,0 +1,93 @@
+{% extends 'adminmaster.html' %}
+
+{% load static %}
+
+{% block css_block %}
+   {# for datatable #}
+   <link rel="stylesheet" type="text/css" href="{% static 'back/css/jquery.dataTables.css' %}">
+{% endblock %}
+
+{% block content %}
+   
+   <!-- <div id="page-content"> -->
+
+      <div class="content-header">
+         <div class="header-section">
+            <h1>
+               <i class="fa fa-table"></i>Newsletter Phones List<br /><small>You can delete your data!</small>
+            </h1>
+         </div>
+      </div>
+      <ul class="breadcrumb breadcrumb-top">
+         <li>Newsletter Phones</li>
+         <li><a href="{% url 'newsletterphone' %}">List</a></li>
+      </ul>
+
+      <div class="block full">
+         <div class="block-title">
+            <h2><strong>Newsletter Phones</strong> List</h2>
+         </div>
+
+         <div class="table-responsive">
+
+            {% if messages %}
+               {% for message in messages %}
+                  <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible">
+                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                     <strong>{{ message }}</strong>
+                  </div>
+               {% endfor %}
+            {% endif %}
+
+            <table id="table_id" class="display table-vcenter table-condensed table-bordered">
+
+               <thead>
+                  <tr>
+                     <th class="text-center">ID</th>
+                     <th>Email</th>
+                     <th class="text-center">Actions</th>
+                  </tr>
+               </thead>
+
+               <tbody>
+
+                  {% for phone in phone_list %}
+                    <tr>
+                       <td class="text-center">{{ phone.pk }}</td>
+
+                       <td>{{ phone.emailorphone }} </td>
+                       <td class="text-center">
+                          <div class="btn-group">
+                             <a href="{% url 'newsletterdelete' id=phone.pk status=phone.status  %}" data-toggle="tooltip" title="Delete" class="btn btn-xs btn-danger"><i class="fa fa-times"></i> Delete</a>
+                          </div>
+                       </td>
+                    </tr>
+                  {% endfor %}
+
+               </tbody>
+
+            </table>
+
+         </div>
+      </div>
+
+   <!-- </div> -->
+
+{% endblock %}
+
+
+{% block js_block %}
+   
+   <!-- for datatable  -->
+   <script type="text/javascript" src="{% static 'back/js/jquery.dataTables.js' %}"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready( function () {
+          //$('#news_list').DataTable();
+          $('#table_id').DataTable();
+      } );
+
+   </script>
+   
+
+{% endblock %}

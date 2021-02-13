@@ -1,0 +1,145 @@
+{% extends 'adminmaster.html' %}
+
+{% load static %}
+
+{% block css_block %}
+   {# for datatable #}
+   <link rel="stylesheet" type="text/css" href="{% static 'back/css/jquery.dataTables.css' %}">
+   <style type="text/css">
+      .error_class{
+         color: red;
+         padding-left: 10px;
+         font-weight: bold;
+      }
+   </style>
+{% endblock %}
+
+{% block content %}
+   
+   <!-- <div id="page-content"> -->
+
+      <div class="content-header">
+         <div class="header-section">
+            <h1>
+               <i class="fa fa-table"></i>User Permissions<br /><small>You can add, edit, and delete your data!</small>
+            </h1>
+         </div>
+      </div>
+      <ul class="breadcrumb breadcrumb-top">
+         <li>User Permissions</li>
+         <li><a href="{% url 'manager.group' %}">Permissions</a></li>
+      </ul>
+
+
+
+      <div class="row">
+         <div class="col-md-12">
+            <div class="block">
+               <div class="block-title">
+
+                  <h2><strong>Assign Permissions of User({{ manager.name }})</strong> </h2>
+               </div>
+
+               {% if messages %}
+                  {% for message in messages %}
+                     <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>{{ message }}</strong>
+                     </div>
+                  {% endfor %}
+               {% endif %}
+
+
+               <form action="{% url 'users_permissions.store' %}" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered"  />
+
+                  {% csrf_token %}
+
+                  <div class="form-group">
+
+                     <div class="col-md-6">
+                        <select id="permission" name="permission" required="required" class="select-chosen" data-placeholder="Choose a Category..." style="width: 250px;">
+                           <option value="">Choose a Permission</option>
+                           {% for permission in permission_list %}
+                              {% if permission.name not in userpermissions  %}
+                                 <option value="{{ permission.pk }}" >{{ permission.name }}</option>
+                              {% endif %}
+                           {% endfor %}
+                        </select>
+                        {% if error.permission %}
+                           <span class="error_class">{{ error.permission }}</span>
+                        {% endif %}
+                        <input type="hidden" name="user_id" id="user_id" value="{{ user.id }}">
+                        <input type="hidden" name="manager_id" id="manager_id" value="{{ manager.id }}">
+                     </div>
+
+                     <div class="col-md-6">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
+                        <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+
+            </div>
+         </div>
+
+      </div>
+
+
+      <div class="block full">
+         <div class="block-title">
+            <h2><strong>User Permissions</strong> List</h2>
+         </div>
+
+         <div class="table-responsive">
+
+            <table id="table_id" class="display table-vcenter table-condensed table-bordered">
+
+               <thead>
+                  <tr>
+                     <th>Name</th>
+                     <th class="text-center">Actions</th>
+                  </tr>
+               </thead>
+
+               <tbody>
+
+                  {% for user_permission in userpermissions %}
+                    <tr>
+                       <td>{{ user_permission }} </td>
+                       <td class="text-center">
+                        {# <a href="#" data-toggle="tooltip" title="Edit" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i> Edit </a> #}
+                        <a href="{% url 'users_permissions.delete' manager_id=manager.id permission_name=user_permission  %}" data-toggle="tooltip" title="Delete" class="btn btn-xs btn-danger"><i class="fa fa-times"></i> Delete</a>
+                       </td>
+                    </tr>
+                  {% endfor %}
+
+               </tbody>
+
+            </table>
+
+         </div>
+      </div>
+
+   <!-- </div> -->
+
+{% endblock %}
+
+
+{% block js_block %}
+   
+   <!-- for datatable  -->
+   <script type="text/javascript" src="{% static 'back/js/jquery.dataTables.js' %}"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready( function () {
+          //$('#news_list').DataTable();
+          $('#table_id').DataTable();
+      } );
+
+   </script>
+   
+
+{% endblock %}
